@@ -1,0 +1,63 @@
+<?php
+
+define('TATTLEBIRD_DEFAULT_PORT', '8034');
+
+/**
+ * Implementation of hook_cron().
+ */
+function tattlebird_cron($output = FALSE) {
+  module_load_include('inc', 'tattlebird', 'tattlebird.cron');
+  return _tattlebird_cron($output);
+}
+
+/**
+ * Implementation of hook_perm().
+ */
+function tattlebird_perm() {
+  return array(
+    'administer tattlebird',
+  );
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function tattlebird_menu() {
+  $items = array(
+    'admin/settings/tattlebird' => array(
+      'title' => 'Tattlebird',
+      'file' => 'tattlebird.admin.inc',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('tattlebird_settings_form'),
+      'access arguments' => array('administer tattlebird'),
+    ),
+  );
+
+  $items['admin/settings/tattlebird/trigger'] = array(
+    'title' => 'Trigger Tattlebird report',
+    'page callback' => 'tattlebird_cron',
+    'page arguments' => array(TRUE),
+    'access arguments' => array('administer tattlebird'),
+  );
+
+  return $items;
+}
+
+function tattlebird_api() {
+  module_load_include('inc', 'tattlebird', 'HttpClientTattleAuth');
+  $key = variable_get('tattlebird_api_key', '');
+  $secret = variable_get('tattlebird_api_secret', '');
+  $auth = new HttpClientTattleAuth($key, $secret);
+  $formatter = new HttpClientBaseFormatter(HttpClientBaseFormatter::FORMAT_JSON);
+  return new HttpClient($auth, $formatter, '_tattlebird_api_call_alter');
+}
+
+function _tattlebird_api_call_alter($request) {
+  static $base_url = FALSE;
+  if (!$base_url) {
+    $server = variable_get('tattlebird_api_server', '');
+    $port = variable_get('tattlebird_api_port', TATTLEBIRD_DEFAULT_PORT);
+    $base_url = "http://{$server}:{$port}/";
+  }
+  $request->url = $base_url . $request->url;
+}
