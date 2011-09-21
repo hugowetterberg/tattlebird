@@ -1,6 +1,5 @@
 name = Tattlebird
 description = Reports update status and othe diagnostic information to a central server.
-dependencies[] = update
 dependencies[] = autoload
 dependencies[] = http_client
 core = 6.x
