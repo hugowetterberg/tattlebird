@@ -1,5 +1,9 @@
 name = Tattlebird
 description = Reports update status and othe diagnostic information to a central server.
-dependencies[] = autoload
 dependencies[] = http_client
-core = 6.x
+core = 7.x
+
+files[] = tattlebird.module
+files[] = tattlebird.cron.inc
+files[] = tattlebird.admin.inc
+files[] = HttpClientTattleAuth.inc

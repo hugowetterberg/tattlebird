@@ -13,9 +13,12 @@ function tattlebird_cron($output = FALSE) {
 /**
  * Implementation of hook_perm().
  */
-function tattlebird_perm() {
+function tattlebird_permission() {
   return array(
-    'administer tattlebird',
+    'administer tattlebird' => array(
+      'title' => t('Administer tattlebird'),
+      'description' => t('Can update and view tattlebird credentials and trigger a manual sync.')
+    ),
   );
 }
 
@@ -24,7 +27,7 @@ function tattlebird_perm() {
  */
 function tattlebird_menu() {
   $items = array(
-    'admin/settings/tattlebird' => array(
+    'admin/config/system/tattlebird' => array(
       'title' => 'Tattlebird',
       'file' => 'tattlebird.admin.inc',
       'page callback' => 'drupal_get_form',
@@ -33,7 +36,7 @@ function tattlebird_menu() {
     ),
   );
 
-  $items['admin/settings/tattlebird/trigger'] = array(
+  $items['admin/config/system/tattlebird/trigger'] = array(
     'title' => 'Trigger Tattlebird report',
     'page callback' => 'tattlebird_cron',
     'page arguments' => array(TRUE),
