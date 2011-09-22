@@ -1,6 +1,6 @@
 <?php
 
-define('TATTLEBIRD_DEFAULT_PORT', '8034');
+define('TATTLEBIRD_DEFAULT_PORT', '8080');
 
 /**
  * Implementation of hook_cron().
