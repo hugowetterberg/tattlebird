@@ -47,10 +47,9 @@ function tattlebird_menu() {
 }
 
 function tattlebird_api() {
-  module_load_include('inc', 'tattlebird', 'HttpClientTattleAuth');
   $key = variable_get('tattlebird_api_key', '');
   $secret = variable_get('tattlebird_api_secret', '');
-  $auth = new HttpClientTattleAuth($key, $secret);
+  $auth = http_client_signing_auth($key, $secret);
   $formatter = new HttpClientBaseFormatter(HttpClientBaseFormatter::FORMAT_JSON);
   return new HttpClient($auth, $formatter, '_tattlebird_api_call_alter');
 }

@@ -1,6 +1,7 @@
 name = Tattlebird
 description = Reports update status and othe diagnostic information to a central server.
 dependencies[] = http_client
+dependencies[] = http_client_signing_auth
 core = 7.x
 
 files[] = tattlebird.module
